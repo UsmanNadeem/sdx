@@ -54,14 +54,15 @@ class QuaggaTopo( Topo ):
 
         "Add switch for IXP fabric"
         ixpfabric = self.addSwitch( 's1' )
+        b_sw = self.addSwitch( 's2' )
+        c_sw = self.addSwitch( 's3' )
 
-
+        otherhost = ''
         "Setup each legacy router, add a link between it and the IXP fabric"
         for host in quaggaHosts:
             "Set Quagga service configuration for this node"
             quaggaSvcConfig = \
             { 'quaggaConfigPath' : scriptdir + '/quaggacfgs/' + host.name }
-
             quaggaContainer = self.addHost( name=host.name,
                                             ip=host.ip,
 					    mac=host.mac,
@@ -73,7 +74,12 @@ class QuaggaTopo( Topo ):
                                 nodeConfig=quaggaSvcConfig)
 	    "Attach the quaggaContainer to the IXP Fabric Switch"
             self.addLink( quaggaContainer, ixpfabric , port2=host.port)
-	
+        otherhost = self.addHost(name = "host", ip = "140.0.0.5/24", mac = '08:00:27:bd:f8:92', privateLogDir=True, privateRunDir=True, inMountNamespace=True, inPIDNamespace=True)
+        #self.addLink( otherhost, 'b1')
+        self.addLink( 'b1', b_sw)
+        self.addLink( otherhost, b_sw)
+        #self.addLink( otherhost, 'c1')
+       
 	" Add root node for ExaBGP. ExaBGP acts as route server for SDX. "
 	root = self.addHost('exabgp', ip = '172.0.255.254/16', inNamespace = False)
 	self.addLink(root, ixpfabric, port2 = 5)
@@ -85,18 +91,16 @@ def addInterfacesForSDXNetwork( net ):
     print "Configuring participating ASs\n\n"
     for host in hosts:
 	print "Host name: ", host.name
-	if host.name=='a1':
-		host.cmd('sudo ifconfig lo:1 100.0.0.1 netmask 255.255.255.0 up')
-		host.cmd('sudo ifconfig lo:2 100.0.0.2 netmask 255.255.255.0 up')
-	if host.name=='b1':
-		host.cmd('sudo ifconfig lo:141 140.0.0.1 netmask 255.255.255.0 up')
-		host.cmd('sudo ifconfig lo:142 140.0.0.2 netmask 255.255.255.0 up')
-	if host.name=='c1':
-		host.cmd('sudo ifconfig lo:141 140.0.0.1 netmask 255.255.255.0 up')
-		host.cmd('sudo ifconfig lo:142 140.0.0.2 netmask 255.255.255.0 up')
-	if host.name=='c2':
-		host.cmd('sudo ifconfig lo:141 140.0.0.1 netmask 255.255.255.0 up')
-		host.cmd('sudo ifconfig lo:142 140.0.0.2 netmask 255.255.255.0 up')
+	#if host.name=='a1':
+		#host.cmd('sudo ifconfig lo:1 100.0.0.1 netmask 255.255.255.0 up')
+	#if host.name=='b1':
+		#host.cmd('sudo ifconfig lo:141 140.0.0.1 netmask 255.255.255.0 up')
+                #host.cmd('sudo ifconfig b1-eth1 172.0.0.2 netmask 255.255.255.0 up')
+	#if host.name=='c1':
+		#host.cmd('sudo ifconfig lo:142 140.0.0.2 netmask 255.255.255.0 up')
+                #host.cmd('sudo ifconfig c1-eth1 172.0.0.3 netmask 255.255.255.0 up')
+	#if host.name=='c2':
+		#host.cmd('sudo ifconfig lo:143 140.0.0.3 netmask 255.255.255.0 
 	if host.name == "exabgp":
 		host.cmd( 'route add -net 172.0.0.0/16 dev exabgp-eth0')
 

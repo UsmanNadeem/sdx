@@ -4,6 +4,7 @@
 #  Arpit Gupta
 
 import sys
+import time
 from threading import Thread
 from multiprocessing.connection import Client
 import os
@@ -13,8 +14,8 @@ sys.path.append(home_path + '/pyretic/pyretic/sdx/bgp')
 
 '''Write output to stdout'''
 def _write(stdout,data):
-    stdout.write(data + '\n')
-    stdout.flush()
+	stdout.write(data + '\n')
+	stdout.flush()
 
 ''' Sender function '''
 def _sender(conn,stdin,log):
@@ -34,8 +35,8 @@ def _sender(conn,stdin,log):
 
 			conn.send(line)
 						
-			#log.write(line + '\n')
-			#log.flush()
+			log.write( "sender: " + line + '\n')
+			log.flush()
 		
 		except:
 			pass
@@ -53,15 +54,15 @@ def _receiver(conn,stdout,log):
 			_write(stdout, line) 
 			''' example: announce route 1.2.3.4 next-hop 5.6.7.8 as-path [ 100 200 ] '''
 			
-			#log.write(line + '\n')
-			#log.flush()
+			log.write( "receiver: " + line + '\n')
+			log.flush()
 		
 		except:
 			pass
 
 ''' main '''	
 if __name__ == '__main__':
-	
+
 	log = open(logfile, "w")
 		
 	conn = Client(('localhost', 6000), authkey='sdx')

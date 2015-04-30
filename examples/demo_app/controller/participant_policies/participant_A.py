@@ -65,7 +65,7 @@ def policy(participant, sdx):
     prefixes_announced=bgp_get_announced_routes(sdx,'A')
     
     final_policy= (
-		   (match(dstport=80) >> sdx.fwd(participant.peers['C']))+
+		   #(match(dstport=80) >> sdx.fwd(participant.peers['C']))+
                    (match_prefixes_set(set(prefixes_announced)) >> sdx.fwd(participant.phys_ports[0]))
                 )
     
