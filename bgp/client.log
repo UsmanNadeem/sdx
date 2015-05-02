@@ -1,0 +1,12 @@
+sender: { "exabgp": "2.0", "time": 1430596647, "neighbor": { "ip": "172.0.0.1", "update": { "attribute": { "origin": "igp", "as-path": [ [ 100 ], [ ] ], "med": 0, "atomic-aggregate": false }, "announce": { "ipv4 unicast": { "100.0.0.0/24": { "next-hop": "172.0.0.1" } } } } } }
+sender: { "exabgp": "2.0", "time": 1430596647, "neighbor": { "ip": "172.0.0.2", "update": { "attribute": { "origin": "igp", "as-path": [ [ 200 ], [ ] ], "med": 0, "atomic-aggregate": false }, "announce": { "ipv4 unicast": { "140.0.0.0/24": { "next-hop": "172.0.0.2" } } } } } }
+sender: { "exabgp": "2.0", "time": 1430596647, "neighbor": { "ip": "172.0.0.3", "update": { "attribute": { "origin": "igp", "as-path": [ [ 300 ], [ ] ], "med": 0, "atomic-aggregate": false }, "announce": { "ipv4 unicast": { "140.0.0.0/24": { "next-hop": "172.0.0.3" } } } } } }
+receiver: announce route 100.0.0.0/24 next-hop 172.0.1.1 as-path [ 100  ]
+receiver: announce route 100.0.0.0/24 next-hop 172.0.1.1 as-path [ 100  ]
+receiver: announce route 140.0.0.0/24 next-hop 172.0.1.2 as-path [ 200  ]
+receiver: announce route 140.0.0.0/24 next-hop 172.0.1.1 as-path [ 200  ]
+receiver: announce route 100.0.0.0/24 next-hop 172.0.1.2 as-path [ 100  ]
+sender: { "exabgp": "2.0", "time": 1430596699, "neighbor": { "ip": "172.0.0.1", "update": { "attribute": { "origin": "igp", "as-path": [ [ 100 ], [ ] ], "med": 0, "atomic-aggregate": false }, "announce": { "ipv4 unicast": { "100.0.0.0/24": { "next-hop": "172.0.0.1" } } } } } }
+receiver: announce route 140.0.0.0/24 next-hop 172.0.1.1 as-path [ 200  ]
+receiver: announce route 100.0.0.0/24 next-hop 172.0.1.2 as-path [ 100  ]
+sender: { "exabgp": "2.0", "time": 1430597080, "notification": "shutdown" }
